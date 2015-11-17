@@ -79,7 +79,7 @@ std::map<char, std::string> getMap(TreeNode<char, unsigned int> *root){
 unsigned int compressFile(std::ifstream &in, std::map<char, std::string> &map, std::ofstream &out){
 
 //TODO TESTING
-	out.put('@');
+	
 
 	// Initializing runtime dependencies
 	bits_in_byte bitContainer;
@@ -92,7 +92,7 @@ unsigned int compressFile(std::ifstream &in, std::map<char, std::string> &map, s
 	}
 
 	if(currentBit != 7){
-		std::cout << "Flushing Complete byte: " << bitContainer << std::endl;
+//		std::cout << "Flushing Complete byte: " << bitContainer << std::endl;
 		out.put(byte(bitContainer.to_ulong()));
 		//out.flush();
 		return currentBit+1;

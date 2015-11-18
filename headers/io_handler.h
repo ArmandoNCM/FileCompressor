@@ -1,9 +1,15 @@
 #ifndef __IO_HANDLER
 #define __IO_HANDLER
 
+// C-Style IO
+#include <stdio.h>
+#include <string.h>
 
+// Headers
 #include <tree_node.h>
 #include <binary_io.h>
+
+// C++ libraries
 #include <iostream>
 #include <fstream>
 #include <forward_list>
@@ -34,7 +40,7 @@ std::ostream& operator<<(std::ostream& os, std::forward_list<TreeNode<char, unsi
 		are going to be stored
 	@return Total number of chars read
 */
-unsigned int countChars(std::string& fileName, std::map<char, unsigned int>& charMap);
+unsigned int countChars(FILE *in, std::map<char, unsigned int>& charMap);
 
 /**
 Prints the elements of the Huffman Tree
@@ -44,7 +50,7 @@ void printTreeElements(TreeNode<char, unsigned int> *root);
 
 
 // TODO DOCUMENT
-void writeByte(std::string *s, unsigned int &currentBit, std::ofstream &out, bits_in_byte &bitContainer);
+void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte &bitContainer);
 
 
 #endif

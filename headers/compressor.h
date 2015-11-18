@@ -1,8 +1,11 @@
 #ifndef __COMPRESSOR
 #define __COMPRESSOR
 
+// Headers
 #include <io_handler.h>
 #include <tree_node.h>
+
+// C++ Libraries
 #include <iostream>
 #include <map>
 #include <forward_list>
@@ -20,7 +23,7 @@ TreeNode<char, unsigned int> generateTree(std::forward_list<TreeNode<char, unsig
 std::map<char, std::string> getMap(TreeNode<char, unsigned int> *root);
 
 
-unsigned int compressFile(std::ifstream &in, std::map<char, std::string> &map, std::ofstream &out);
+unsigned int compressFile(FILE *in, std::map<char, std::string> &map, FILE *out);
 
 
 #endif

@@ -8,17 +8,18 @@ std::ostream& operator<<(std::ostream& os, std::forward_list<TreeNode<char, unsi
 	return os;
 }
 
-unsigned int countChars(std::string& fileName, std::map<char, unsigned int>& charMap){
-	std::ifstream in(fileName);
+unsigned int countChars(FILE *in, std::map<char, unsigned int>& charMap){
 	// Reading characters
 	unsigned int totalChars = 0;
 	char ch;
-	while(in.get(ch)){
+	while((ch = fgetc(in)) != EOF){
 		charMap[ch]++;
 		totalChars++;
 	}
 	return totalChars;
 }
+
+
 
 
 
@@ -36,7 +37,8 @@ void printTreeElements(TreeNode<char, unsigned int> *root){
 }
 
 
-void writeByte(std::string *s, unsigned int &currentBit, std::ofstream &out, bits_in_byte &bitContainer){
+
+void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte &bitContainer){
 	int strLength(s->length());
 	int overflow = strLength - currentBit - 1;
 	if(overflow > 0){
@@ -46,12 +48,12 @@ void writeByte(std::string *s, unsigned int &currentBit, std::ofstream &out, bit
 		unsigned int threshold(strLength-overflow);
 		writeByte(new std::string(s->substr(0,threshold)), currentBit, out, bitContainer);
 //		std::cout << "Flushing Complete byte: " << bitContainer << std::endl;
-		out.put(byte(bitContainer.to_ulong())); // XXX KEEP THIS IN MIND, HERE IS THE FLUSH OF THE BYTE TO THE OUTPUT STREAM
-//		out.flush();
-		bitContainer = bits_in_byte("00000000");
-		currentBit=7; // XXX
+		fputc(byte(bitContainer.to_ulong()), out);
+//		fflush(out);
+		bitContainer = bits_in_byte("00000000"); // Reset bits_in_byte to zeros
+		currentBit=7; // Reset current bit position
 		writeByte(new std::string(s->substr(threshold)), currentBit, out, bitContainer);
-	} // TODO CHECK IF THE FOLLOWING CYCLE SHOULD BE IN THE ELSE CLAUSE OF THE THE PREVIOUS IF BLOCK
+	}
 	else{
 		for(auto bit : *s){
 			if(bit == '1'){

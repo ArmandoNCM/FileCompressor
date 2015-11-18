@@ -6,7 +6,6 @@ bool compare(const TreeNode<char,unsigned int>& leafA, const TreeNode<char,unsig
 
 }
 
-
 unsigned int createLinkedList(std::map<char, unsigned int>& charMap, std::forward_list<TreeNode<char, unsigned int>>& list){
 	unsigned int itemCount = 0;
 	for(auto item : charMap){
@@ -35,7 +34,6 @@ TreeNode<char, unsigned int> generateTree(std::forward_list<TreeNode<char, unsig
 		leafC.b = leafA->b + leafB->b;
 		leafC.right = leafA;
 		leafC.left = leafB;
-//XXX		std::cout << "Combined " << leafB->a << leafB->b << " with " << leafA->a << leafA->b << std::endl;
 		list.push_front(leafC);
 		itemCount--;
 	}
@@ -72,32 +70,24 @@ std::map<char, std::string> getMap(TreeNode<char, unsigned int> *root){
 	
 }
 
-//Beginning at 0 -> 01001100
-//Beginning at 7 -> 01001100
 
-
-unsigned int compressFile(std::ifstream &in, std::map<char, std::string> &map, std::ofstream &out){
-
-//TODO TESTING
-	
+unsigned int compressFile(FILE *in, std::map<char, std::string> &map, FILE *out){
 
 	// Initializing runtime dependencies
 	bits_in_byte bitContainer;
 	unsigned int currentBit(7); // XXX 
 
 	char c;
-	while(in.get(c)){
+	while((c = fgetc(in)) != EOF){
 //		std::cout << "Compressing char -> " << c << std::endl;
 		writeByte(new std::string(map[c]), currentBit, out, bitContainer);
 	}
 
 	if(currentBit != 7){
-//		std::cout << "Flushing Complete byte: " << bitContainer << std::endl;
-		out.put(byte(bitContainer.to_ulong()));
-		//out.flush();
+		std::cout << "Flushing Complete byte: " << bitContainer << std::endl;
+		fputc(byte(bitContainer.to_ulong()), out);
 		return currentBit+1;
 	}
-	out.close();
+	fclose(out);
 	return 0;
-
 }

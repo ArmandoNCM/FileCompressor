@@ -1,6 +1,30 @@
 #include <io_handler.h>
 
 
+int readFile(char const *fileName, char **buffer, long &fileSize){
+	FILE *in = fopen(fileName, "rb");
+	if(in == NULL)
+		return 2;
+
+	// obtain file size
+	fseek(in, 0, SEEK_END);
+	fileSize = ftell(in);
+	rewind(in);
+
+	// allocate memory to contain the whole file:
+  	*buffer = (char*) malloc (sizeof(char)*fileSize);
+  	if(buffer == NULL)
+  		return 3;
+
+  	if(fread(*buffer, 1, fileSize, in) != fileSize)
+  		return 4;
+
+  	fclose(in);
+  	return 0;
+
+
+}
+
 std::ostream& operator<<(std::ostream& os, std::forward_list<TreeNode<char, unsigned int>>& list){
 	for(auto item : list){
 		os << "(" << item.a << "," << item.b << ")";
@@ -8,19 +32,20 @@ std::ostream& operator<<(std::ostream& os, std::forward_list<TreeNode<char, unsi
 	return os;
 }
 
-unsigned int countChars(FILE *in, std::map<char, unsigned int>& charMap){
-	// Reading characters
-	unsigned int totalChars = 0;
-	char ch;
-	while((ch = fgetc(in)) != EOF){
-		charMap[ch]++;
-		totalChars++;
-	}
-	return totalChars;
+
+void storeTree(FILE *out, TreeNode<char, unsigned int> *root){
+	if(root != NULL){
+		if(root->a != 0)
+			fputc(root->a, out);
+		else
+			fputc('*', out);
+		storeTree(out, root->left);
+		storeTree(out, root->right);
+
+	} else
+		fputc('.', out);
+
 }
-
-
-
 
 
 void printTreeElements(TreeNode<char, unsigned int> *root){
@@ -35,6 +60,8 @@ void printTreeElements(TreeNode<char, unsigned int> *root){
 		printTreeElements(root->right);	// Print items in right subtree.
 	}
 }
+
+
 
 
 
@@ -55,7 +82,8 @@ void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte
 		writeByte(new std::string(s->substr(threshold)), currentBit, out, bitContainer);
 	}
 	else{
-		for(auto bit : *s){
+
+		for(auto const &bit : *s){
 			if(bit == '1'){
 				bitContainer[currentBit] = 1;// XXX insert zero at currentBit in bitSet
 //				std::cout << "Set bit\t->" << (currentBit+1) << " to: 1\t->"  << bitContainer << std::endl;

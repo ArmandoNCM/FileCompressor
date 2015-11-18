@@ -3,6 +3,7 @@
 
 // C-Style IO
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 // Headers
@@ -19,7 +20,7 @@
 
 
 
-
+int readFile(char const *fileName, char **buffer, long &fileSize);
 
 /**
 	Defines the behavior of the << operator when 
@@ -31,16 +32,6 @@
 */
 std::ostream& operator<<(std::ostream& os, std::forward_list<TreeNode<char, unsigned int>>& list);
 
-/**
-	Counts the chars of a file, and stores their
-	frequencies in a map referred by the corresponding
-	char as the key
-	@param fileName Path of the file to be read
-	@param map Map to which the results of the count 
-		are going to be stored
-	@return Total number of chars read
-*/
-unsigned int countChars(FILE *in, std::map<char, unsigned int>& charMap);
 
 /**
 Prints the elements of the Huffman Tree
@@ -51,6 +42,9 @@ void printTreeElements(TreeNode<char, unsigned int> *root);
 
 // TODO DOCUMENT
 void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte &bitContainer);
+
+
+void storeTree(FILE *out, TreeNode<char, unsigned int> *root);
 
 
 #endif

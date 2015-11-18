@@ -2,22 +2,22 @@
 #include <stdio.h>
 #include <string.h>
 
-using byte = unsigned char;
+
+void method(int **ptrptrInt){
+	int lol = 5;
+	*ptrptrInt = &lol;
+}
+
 
 int main(int argc, char const *argv[])
 {
 	/* code */
 
-	std::cout << "EOF: " << EOF << "( " << ((int) EOF) << " )" << std::endl;
+	int an = 10;
+	int *ptrAn = &an;
+	method(&ptrAn);
 
-	FILE *in = fopen(argv[1], "r");
-
-	char ch;
-
-	while((ch = fgetc(in)) != EOF){
-		std::cout << ch << ",";
-	}
-	std::cout << std::endl;
+	std::cout << *ptrAn << std::endl;
 
 	return 0;
 }

@@ -4,12 +4,36 @@
 #include <utility>
 
 
+int checkPath(){
+	
+}
 
 
-int main(int argc, char const *argv[]){
-	// Checking the number of arguments
+int main(int argc, char const *argv[])
+{
+	/* code */
+
 	if(argc < 2)
 		return 1;
+
+	int result = checkPath(argv[1]);
+
+	switch(result){
+		case 0:
+		break;
+
+		case 1:
+		break;
+	}
+
+	return 0;
+}
+
+
+int process(char *fileName){
+	// Checking the number of arguments
+	//if(argc < 2)
+	//	return 1;
 	// Getting file pointer
 	//XXX FILE *in = fopen(argv[1], "r");
 
@@ -19,7 +43,7 @@ int main(int argc, char const *argv[]){
 	char *buffer;
 	long fileSize = 0;
 
-	int result = readFile(argv[1], &buffer, fileSize);
+	int result = readFile(fileName, &buffer, fileSize);
 	if(result != 0)
 		return result;
 
@@ -40,11 +64,18 @@ int main(int argc, char const *argv[]){
 //	printTreeElements(&root);
 //	std::cout << std::endl;
 	// Generate map with short representations of each character
-	std::map<char, std::string> map = getMap(&root); // FIXME
-	char fPath[strlen(argv[1]) + 4] = {};
-	strcat(fPath, argv[1]);
+	std::map<char, std::string> map = getMap(&root);
+
+
+
+
+	char fPath[strlen(fileName) + 4]; // = {0};
+	memset(fPath, 0, strlen(fileName) + 4); // Set Array to Zero
+	strcat(fPath, fileName);
 	strcat(fPath, ".huff");
 	FILE *out = fopen(fPath , "wb");
+
+
 	fputc((char) 1, out); // SOH
 	fputs(argv[1], out); // fileName
 	fputc((char) 25, out); // EM

@@ -1,6 +1,17 @@
 #include <io_handler.h>
 
 
+
+
+int checkPath(char *fileName){
+
+	stat(fileName, &filestat);
+	if(S_ISDIR(filestat.st_mode))
+		return 0;
+	else
+		return 1;
+}
+
 int readFile(char const *fileName, char **buffer, long &fileSize){
 	FILE *in = fopen(fileName, "rb");
 	if(in == NULL)

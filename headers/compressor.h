@@ -6,12 +6,11 @@
 #include <tree_node.h>
 
 // C++ Libraries
-#include <iostream>
-#include <map>
-#include <forward_list>
 #include <string>
+#include <algorithm>
+#include <utility>
 
-bool compare(const TreeNode<char,unsigned int>& leafA, const TreeNode<char,unsigned int>& leafB);
+bool compare(const TreeNode &leafA, const TreeNode &leafB);
 
 
 
@@ -25,19 +24,25 @@ bool compare(const TreeNode<char,unsigned int>& leafA, const TreeNode<char,unsig
 		are going to be stored
 	@return Total number of chars read
 */
-void countChars(char *buffer, std::map<char, unsigned int>& charMap, long &length);
+void countChars(char *buffer, std::unordered_map<char, unsigned int>& charMap, long &length);
 
 
-unsigned int createLinkedList(std::map<char, unsigned int>& charMap, std::forward_list<TreeNode<char, unsigned int>>& list);
+unsigned int createLinkedList(std::unordered_map<char, unsigned int>& charMap, std::vector<TreeNode>& list);
 
 
-TreeNode<char, unsigned int> generateTree(std::forward_list<TreeNode<char, unsigned int>>& list, unsigned int itemCount);
+TreeNode generateTree(std::vector<TreeNode>& list, unsigned int itemCount);
+
+void setCharIndex(TreeNode *root, std::pair<char, std::string*> *charIndex);
 
 
-std::map<char, std::string> getMap(TreeNode<char, unsigned int> *root);
+//std::unordered_map<char, std::string> getMap(TreeNode *root);
 
 
-unsigned char compressFile(char *buffer, std::map<char, std::string> &map, FILE *out, long &length);
+//unsigned char compressFile(char *buffer, std::unordered_map<char, std::string> &map, FILE *out, long &length);
+
+void encode(char *buffer, std::unordered_map<char, std::string> &map, std::string &encodedString, long &length);
+
+//void traceTreeLeafs(TreeNode *root, std::string &s, std::unordered_map<char, std::string> &map);
 
 
 #endif

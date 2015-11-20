@@ -1,36 +1,14 @@
 //#include <io_handler.h>
 //#include <tree_node.h>
 #include <compressor.h>
-#include <utility>
 
 
-int checkPath(){
-	
-}
 
 
-int main(int argc, char const *argv[])
-{
-	/* code */
-
-	if(argc < 2)
-		return 1;
-
-	int result = checkPath(argv[1]);
-
-	switch(result){
-		case 0:
-		break;
-
-		case 1:
-		break;
-	}
-
-	return 0;
-}
 
 
-int process(char *fileName){
+
+int process(const char *fileName){
 	// Checking the number of arguments
 	//if(argc < 2)
 	//	return 1;
@@ -49,24 +27,32 @@ int process(char *fileName){
 
 
 	// Creating the char map
-	std::map<char, unsigned int> charMap;
+	std::unordered_map<char, unsigned int> charMap;
 	// Count Chars
 	countChars(buffer, charMap, fileSize); // FIXME
 
 
 	// Creating a forward linked list
-	std::forward_list<TreeNode<char, unsigned int>> list;
+	std::vector<TreeNode> list;
 	unsigned int itemCount = createLinkedList(charMap, list);
+	// Getting Tree root
+	TreeNode root = generateTree(list, itemCount);
 
-	TreeNode<char, unsigned int> root = generateTree(list, itemCount);
+	std::cout << "Tree Elements:" << std::endl;
+	printTreeElements(&root);
+	std::cout << std::endl;
 
-//	std::cout << "Tree Elements:" << std::endl;
-//	printTreeElements(&root);
-//	std::cout << std::endl;
+	std::pair<char, std::string*> *charIndex;// = new std::pair<char, std::string*>()[];
+	charIndex = (std::pair<char, std::string*>*) malloc ((sizeof(std::pair<char, std::string*>*)) * itemCount);
+
+	setCharIndex(&root, charIndex);
+
+
+
+
 	// Generate map with short representations of each character
-	std::map<char, std::string> map = getMap(&root);
-
-
+//	std::unordered_map<char, std::string> map = getMap(&root); // XXX FIXME
+//	std::cout << "Done!" << std::endl;
 
 
 	char fPath[strlen(fileName) + 4]; // = {0};
@@ -74,6 +60,7 @@ int process(char *fileName){
 	strcat(fPath, fileName);
 	strcat(fPath, ".huff");
 	FILE *out = fopen(fPath , "wb");
+/*
 
 
 	fputc((char) 1, out); // SOH
@@ -85,13 +72,35 @@ int process(char *fileName){
 	storeTree(out, &root); // Tree 
 	fputc((char) 2, out); // STX
 
-	char paddingBits = compressFile(buffer, map, out, fileSize);
-	fseek(out, pos, SEEK_SET);
-	fputc(paddingBits, out);
-	fseek(out, 0, SEEK_END);
-	std::cout << "Number of padding tail bits: " << (int) paddingBits << std::endl;
-	//std::cout << "Total chars read: " << fileSize << std::endl;
+	*/
+
+	//std::string encodedString;
+	//encode(buffer, map, encodedString, fileSize);
+
+//	char paddingBits = compressFile(buffer, map, out, fileSize);
+//	fseek(out, pos, SEEK_SET);
+//	fputc(paddingBits, out);
+//	fseek(out, 0, SEEK_END);
+//	std::cout << "Number of padding tail bits: " << (int) paddingBits << std::endl;
+	std::cout << "Total chars read: " << fileSize << std::endl;
 	fflush(out);
-	free(buffer);
+	//delete buffer;
+
+	return 0;
+}
+
+
+
+int main(int argc, char const *argv[])
+{
+	/* code */
+
+	if(argc < 2)
+		return 1;
+
+	//int result = checkPath(argv[1]);
+
+	process(argv[1]);
+
 	return 0;
 }

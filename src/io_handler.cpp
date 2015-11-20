@@ -3,13 +3,10 @@
 
 
 
-int checkPath(char *fileName){
-
+bool isDirectory(char *fileName){
+	struct stat filestat;
 	stat(fileName, &filestat);
-	if(S_ISDIR(filestat.st_mode))
-		return 0;
-	else
-		return 1;
+	return S_ISDIR(filestat.st_mode);
 }
 
 int readFile(char const *fileName, char **buffer, long &fileSize){
@@ -31,23 +28,24 @@ int readFile(char const *fileName, char **buffer, long &fileSize){
   		return 4;
 
   	fclose(in);
+  	//delete in;
   	return 0;
 
 
 }
 
-std::ostream& operator<<(std::ostream& os, std::forward_list<TreeNode<char, unsigned int>>& list){
+std::ostream& operator<<(std::ostream& os, std::vector<TreeNode>& list){
 	for(auto item : list){
-		os << "(" << item.a << "," << item.b << ")";
+		os << "(" << item.character << "," << item.frequency << ")";
 	}
 	return os;
 }
 
 
-void storeTree(FILE *out, TreeNode<char, unsigned int> *root){
+void storeTree(FILE *out, TreeNode *root){
 	if(root != NULL){
-		if(root->a != 0)
-			fputc(root->a, out);
+		if(root->character != 0)
+			fputc(root->character, out);
 		else
 			fputc('*', out);
 		storeTree(out, root->left);
@@ -59,14 +57,14 @@ void storeTree(FILE *out, TreeNode<char, unsigned int> *root){
 }
 
 
-void printTreeElements(TreeNode<char, unsigned int> *root){
+void printTreeElements(TreeNode *root){
 	// Print all the items in the tree to which root points.
 	// The item in the root is printed first, followed by the
 	// items in the left subtree and then the items in the
 	// right subtree.
 	if(root != NULL){
-		if(root->a != 0)
-			std::cout << root->a << root->b << std::endl;	// Print the root item.
+		if(root->character != 0)
+			std::cout << root->character << root->frequency << std::endl;	// Print the root item.
 		printTreeElements(root->left);	// Print items in left subtree.
 		printTreeElements(root->right);	// Print items in right subtree.
 	}
@@ -74,11 +72,11 @@ void printTreeElements(TreeNode<char, unsigned int> *root){
 
 
 
+/*
 
-
-void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte &bitContainer){
-	int strLength(s->length());
-	int overflow = strLength - currentBit - 1;
+void writeByte(std::string *s, byte &currentBit, FILE *out, bits_in_byte &bitContainer){
+	byte strLength(s->length());
+	char overflow = strLength - currentBit - 1;
 	if(overflow > 0){
 		// we got ourselves a problem
 //		std::cout << "There was Overflow" << std::endl;
@@ -87,8 +85,7 @@ void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte
 		writeByte(new std::string(s->substr(0,threshold)), currentBit, out, bitContainer);
 //		std::cout << "Flushing Complete byte: " << bitContainer << std::endl;
 		fputc(byte(bitContainer.to_ulong()), out);
-//		fflush(out);
-		bitContainer = bits_in_byte("00000000"); // Reset bits_in_byte to zeros
+		bitContainer.reset();
 		currentBit=7; // Reset current bit position
 		writeByte(new std::string(s->substr(threshold)), currentBit, out, bitContainer);
 	}
@@ -99,11 +96,32 @@ void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte
 				bitContainer[currentBit] = 1;// XXX insert zero at currentBit in bitSet
 //				std::cout << "Set bit\t->" << (currentBit+1) << " to: 1\t->"  << bitContainer << std::endl;
 			}
-//			else // XXX
-//				std::cout << "Set bit\t->" << (currentBit+1) << " to: 0\t->"  << bitContainer << std::endl;
+//			else std::cout << "Set bit\t->" << (currentBit+1) << " to: 0\t->"  << bitContainer << std::endl; 
+//				
 
 			//else don't insert anything (leave with default 0)
 			currentBit--;
 		}	
 	}
 }
+*/
+
+void writeBytes(std::string &encodedString, FILE *out){
+	std::string bitSequence;
+	bits_in_byte bitarray;
+	long long int strLength(encodedString.length());
+	long long int max(strLength - BITS_PER_BYTE + 1);
+	long long int i = 0;
+	long long int j;
+	while(i < max){
+		j = i + 8;
+		bitSequence = encodedString.substr(i, j);
+		bitarray = bits_in_byte(bitSequence);
+		fputc((byte) bitarray.to_ulong(), out);
+		i=j;
+	}
+	//if(i < strLength)
+	//	writePaddedByte(encodedString.substr(strLength));
+}
+
+//void writePaddedByte(std::string lastBitSequence)

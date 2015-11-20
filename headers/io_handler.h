@@ -15,8 +15,9 @@
 // C++ libraries
 #include <iostream>
 #include <fstream>
-#include <forward_list>
-#include <map>
+//XXX #include <forward_list> 
+#include <vector>
+#include <unordered_map>
 
 
 
@@ -32,21 +33,24 @@ int readFile(char const *fileName, char **buffer, long &fileSize);
 	@param list list to be put into the out-stream
 
 */
-std::ostream& operator<<(std::ostream& os, std::forward_list<TreeNode<char, unsigned int>>& list);
+std::ostream& operator<<(std::ostream& os, std::vector<TreeNode>& list);
+
+void storeTree(FILE *out, TreeNode *root);
+
 
 
 /**
 Prints the elements of the Huffman Tree
 @param *root Pointer to the root of the tree
 */
-void printTreeElements(TreeNode<char, unsigned int> *root);
+void printTreeElements(TreeNode *root);
 
 
-// TODO DOCUMENT
-void writeByte(std::string *s, unsigned int &currentBit, FILE *out, bits_in_byte &bitContainer);
+//void writeByte(std::string *s, byte &currentBit, FILE *out, bits_in_byte &bitContainer);
+
+void writeBytes(std::string &encodedString, FILE *out);
 
 
-void storeTree(FILE *out, TreeNode<char, unsigned int> *root);
 
 
 #endif

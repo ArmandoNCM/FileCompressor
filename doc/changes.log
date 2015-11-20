@@ -1,0 +1,5 @@
+Changes made so far:
+
+-Changed all the std::ifstreams and std::ofstreams for a FILE *pointer of C-Style IO (cstdio)
+-Changed the std::map for std::unordered_map
+-Changed all the std::forward_list to std::vector and now using std::sort

@@ -9,7 +9,7 @@ bool isDirectory(char *fileName){
 	return S_ISDIR(filestat.st_mode);
 }
 
-int readFile(char const *fileName, char **buffer, long &fileSize){
+int readFile(char const *fileName, char **buffer, unsigned int &fileSize){
 	FILE *in = fopen(fileName, "rb");
 	if(in == NULL)
 		return 2;
@@ -27,8 +27,6 @@ int readFile(char const *fileName, char **buffer, long &fileSize){
   	if(fread(*buffer, 1, fileSize, in) != fileSize)
   		return 4;
 
-  	fclose(in);
-  	//delete in;
   	return 0;
 
 
@@ -109,10 +107,10 @@ void writeByte(std::string *s, byte &currentBit, FILE *out, bits_in_byte &bitCon
 void writeBytes(std::string &encodedString, FILE *out){
 	std::string bitSequence;
 	bits_in_byte bitarray;
-	long long int strLength(encodedString.length());
-	long long int max(strLength - BITS_PER_BYTE + 1);
-	long long int i = 0;
-	long long int j;
+	unsigned long strLength(encodedString.length());
+	unsigned long max(strLength - BITS_PER_BYTE + 1);
+	unsigned long i = 0;
+	unsigned long j;
 	while(i < max){
 		j = i + 8;
 		bitSequence = encodedString.substr(i, j);

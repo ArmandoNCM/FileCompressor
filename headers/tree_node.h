@@ -3,7 +3,7 @@
 
 struct TreeNode{
 	char character;
-	unsigned long frequency;
+	unsigned int frequency;
 	TreeNode* left;
 	TreeNode* right;
 };

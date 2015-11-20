@@ -23,7 +23,7 @@
 
 
 
-int readFile(char const *fileName, char **buffer, long &fileSize);
+int readFile(char const *fileName, char **buffer, unsigned int &fileSize);
 
 /**
 	Defines the behavior of the << operator when 

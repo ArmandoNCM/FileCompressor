@@ -24,7 +24,7 @@ bool compare(const TreeNode &leafA, const TreeNode &leafB);
 		are going to be stored
 	@return Total number of chars read
 */
-void countChars(char *buffer, std::unordered_map<char, unsigned int>& charMap, long &length);
+void countChars(char *buffer, std::unordered_map<char, unsigned int>& charMap, unsigned int &length);
 
 
 unsigned int createLinkedList(std::unordered_map<char, unsigned int>& charMap, std::vector<TreeNode>& list);
@@ -40,7 +40,7 @@ void setCharIndex(TreeNode *root, std::pair<char, std::string*> *charIndex);
 
 //unsigned char compressFile(char *buffer, std::unordered_map<char, std::string> &map, FILE *out, long &length);
 
-void encode(char *buffer, std::unordered_map<char, std::string> &map, std::string &encodedString, long &length);
+void encode(char *buffer, std::pair<char, std::string*> *charIndex, std::string &encodedString, unsigned int &itemCount, unsigned int &length);
 
 //void traceTreeLeafs(TreeNode *root, std::string &s, std::unordered_map<char, std::string> &map);
 

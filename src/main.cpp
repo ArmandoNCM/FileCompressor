@@ -2,7 +2,7 @@
 //#include <tree_node.h>
 #include <compressor.h>
 
-
+//std::ostream& operator<<(std::ostream &out, char)
 
 
 
@@ -19,17 +19,17 @@ int process(const char *fileName){
 
 	// Reading file
 	char *buffer;
-	long fileSize = 0;
+	unsigned int fileSize = 0;
 
 	int result = readFile(fileName, &buffer, fileSize);
 	if(result != 0)
-		return result;
+		return result; // If there was a problem, return its error code
 
 
 	// Creating the char map
 	std::unordered_map<char, unsigned int> charMap;
 	// Count Chars
-	countChars(buffer, charMap, fileSize); // FIXME
+	countChars(buffer, charMap, fileSize); 
 
 
 	// Creating a forward linked list
@@ -38,21 +38,21 @@ int process(const char *fileName){
 	// Getting Tree root
 	TreeNode root = generateTree(list, itemCount);
 
-	std::cout << "Tree Elements:" << std::endl;
-	printTreeElements(&root);
-	std::cout << std::endl;
+//	std::cout << "Tree Elements:" << std::endl;
+//	printTreeElements(&root);
+//	std::cout << std::endl;
 
 	std::pair<char, std::string*> *charIndex;// = new std::pair<char, std::string*>()[];
-	charIndex = (std::pair<char, std::string*>*) malloc ((sizeof(std::pair<char, std::string*>*)) * itemCount);
+	charIndex = (std::pair<char, std::string*>*) malloc((sizeof(std::pair<char, std::string*>)) * itemCount);
 
+	// Generate character index with short representations of each character
 	setCharIndex(&root, charIndex);
 
-
-
-
-	// Generate map with short representations of each character
-//	std::unordered_map<char, std::string> map = getMap(&root); // XXX FIXME
-//	std::cout << "Done!" << std::endl;
+	std::string encodedString;
+	encode(buffer, charIndex, encodedString, itemCount, fileSize);
+	
+	free(buffer);
+	//delete buffer;
 
 
 	char fPath[strlen(fileName) + 4]; // = {0};
@@ -60,6 +60,8 @@ int process(const char *fileName){
 	strcat(fPath, fileName);
 	strcat(fPath, ".huff");
 	FILE *out = fopen(fPath , "wb");
+	writeBytes(encodedString, out);
+
 /*
 
 
@@ -74,17 +76,14 @@ int process(const char *fileName){
 
 	*/
 
-	//std::string encodedString;
-	//encode(buffer, map, encodedString, fileSize);
 
 //	char paddingBits = compressFile(buffer, map, out, fileSize);
 //	fseek(out, pos, SEEK_SET);
 //	fputc(paddingBits, out);
 //	fseek(out, 0, SEEK_END);
 //	std::cout << "Number of padding tail bits: " << (int) paddingBits << std::endl;
-	std::cout << "Total chars read: " << fileSize << std::endl;
-	fflush(out);
-	//delete buffer;
+//	std::cout << "Total chars read: " << fileSize << std::endl;
+//	fflush(out);
 
 	return 0;
 }
@@ -98,7 +97,6 @@ int main(int argc, char const *argv[])
 	if(argc < 2)
 		return 1;
 
-	//int result = checkPath(argv[1]);
 
 	process(argv[1]);
 

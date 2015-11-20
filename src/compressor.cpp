@@ -7,10 +7,8 @@ bool compare(const TreeNode &leafA, const TreeNode &leafB){
 }
 
 
-void countChars(char *buffer, std::unordered_map<char, unsigned int>& charMap, long &length){
-	// Reading characters
-
-	for(long i = 0; i < length; i++){
+void countChars(char *buffer, std::unordered_map<char, unsigned int>& charMap, unsigned int &length){
+	for(unsigned int i = 0; i < length; i++){
 		charMap[*buffer]++;
 		buffer++;
 	}
@@ -140,12 +138,19 @@ unsigned char compressFile(char *buffer, std::unordered_map<char, std::string> &
 }
 */
 
-void encode(char *buffer, std::unordered_map<char, std::string> &map, std::string &encodedString, long &length){
-	for(long i = 0; i < length; i++){
-		encodedString += map[*buffer];
-		buffer++;
+
+std::string getEncodedChar(char &character, std::pair<char, std::string*> *charIndex, unsigned int &itemCount){
+	for(unsigned int i = 0; i < itemCount; i++){
+		if(std::get<0>(charIndex[i]) == character)
+			return *std::get<1>(charIndex[i]);
+	}
+	//return "";
+	return NULL; // WATCH OUT HERE
+}
+
+void encode(char *buffer, std::pair<char, std::string*> *charIndex, std::string &encodedString, unsigned int &itemCount, unsigned int &length){
+	for(unsigned int i = 0; i < length; i++){
+		encodedString += getEncodedChar(buffer[i], charIndex, itemCount);
 	}	
-	//free(&buffer);
-	//delete &buffer;
 }
 

@@ -1,9 +1,6 @@
 #include <io_handler.h>
 
-
-
-
-bool isDirectory(char *fileName){
+bool isDirectory(const char *fileName){
 	struct stat filestat;
 	stat(fileName, &filestat);
 	return S_ISDIR(filestat.st_mode);
@@ -28,8 +25,6 @@ int readFile(char const *fileName, char **buffer, unsigned int &fileSize){
   		return 4;
 
   	return 0;
-
-
 }
 
 std::ostream& operator<<(std::ostream& os, std::vector<TreeNode>& list){
@@ -38,7 +33,6 @@ std::ostream& operator<<(std::ostream& os, std::vector<TreeNode>& list){
 	}
 	return os;
 }
-
 
 void storeTree(FILE *out, TreeNode *root){
 	if(root != NULL){
@@ -54,7 +48,6 @@ void storeTree(FILE *out, TreeNode *root){
 
 }
 
-
 void printTreeElements(TreeNode *root){
 	// Print all the items in the tree to which root points.
 	// The item in the root is printed first, followed by the
@@ -68,58 +61,27 @@ void printTreeElements(TreeNode *root){
 	}
 }
 
-
-
-/*
-
-void writeByte(std::string *s, byte &currentBit, FILE *out, bits_in_byte &bitContainer){
-	byte strLength(s->length());
-	char overflow = strLength - currentBit - 1;
-	if(overflow > 0){
-		// we got ourselves a problem
-//		std::cout << "There was Overflow" << std::endl;
-
-		unsigned int threshold(strLength-overflow);
-		writeByte(new std::string(s->substr(0,threshold)), currentBit, out, bitContainer);
-//		std::cout << "Flushing Complete byte: " << bitContainer << std::endl;
-		fputc(byte(bitContainer.to_ulong()), out);
-		bitContainer.reset();
-		currentBit=7; // Reset current bit position
-		writeByte(new std::string(s->substr(threshold)), currentBit, out, bitContainer);
-	}
-	else{
-
-		for(auto const &bit : *s){
-			if(bit == '1'){
-				bitContainer[currentBit] = 1;// XXX insert zero at currentBit in bitSet
-//				std::cout << "Set bit\t->" << (currentBit+1) << " to: 1\t->"  << bitContainer << std::endl;
-			}
-//			else std::cout << "Set bit\t->" << (currentBit+1) << " to: 0\t->"  << bitContainer << std::endl; 
-//				
-
-			//else don't insert anything (leave with default 0)
-			currentBit--;
-		}	
-	}
+byte getPaddedByte(const char *lastBitSequence, unsigned char paddingBits){
+		bits_in_byte bitContainer(lastBitSequence);
+		bitContainer <<= paddingBits;
+		return (byte) bitContainer.to_ulong();
 }
-*/
 
 void writeBytes(std::string &encodedString, FILE *out){
-	std::string bitSequence;
+	const char *bitSequence = encodedString.c_str();
 	bits_in_byte bitarray;
 	unsigned long strLength(encodedString.length());
 	unsigned long max(strLength - BITS_PER_BYTE + 1);
 	unsigned long i = 0;
-	unsigned long j;
-	while(i < max){
-		j = i + 8;
-		bitSequence = encodedString.substr(i, j);
-		bitarray = bits_in_byte(bitSequence);
-		fputc((byte) bitarray.to_ulong(), out);
-		i=j;
-	}
-	//if(i < strLength)
-	//	writePaddedByte(encodedString.substr(strLength));
+	if(strLength > 7){
+		while(i < max){
+			bitarray = bits_in_byte(bitSequence, 8);
+			fputc((byte) bitarray.to_ulong(), out);
+			bitSequence += 8;
+			i += 8;
+		}
+		if(i < strLength)
+			fputc(getPaddedByte(bitSequence, (unsigned char) 8 - (strLength - i)), out);
+	} else
+		fputc(getPaddedByte(bitSequence, (unsigned char) 8 - strLength), out);
 }
-
-//void writePaddedByte(std::string lastBitSequence)

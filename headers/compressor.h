@@ -10,39 +10,20 @@
 #include <algorithm>
 #include <utility>
 
+const unsigned char maxAscii = 255;
+
+
 bool compare(const TreeNode &leafA, const TreeNode &leafB);
 
+void countChars(unsigned int *freqCount, char *buffer, unsigned int &fileSize);
 
 
+unsigned char createLinkedList(unsigned int *freqCount, std::vector<TreeNode>& list);
 
-/**
-	Counts the chars of a file, and stores their
-	frequencies in a map referred by the corresponding
-	char as the key
-	@param fileName Path of the file to be read
-	@param map Map to which the results of the count 
-		are going to be stored
-	@return Total number of chars read
-*/
-void countChars(char *buffer, std::unordered_map<char, unsigned int>& charMap, unsigned int &length);
-
-
-unsigned int createLinkedList(std::unordered_map<char, unsigned int>& charMap, std::vector<TreeNode>& list);
-
-
-TreeNode generateTree(std::vector<TreeNode>& list, unsigned int itemCount);
+TreeNode generateTree(std::vector<TreeNode>& list, unsigned char itemCount);
 
 void setCharIndex(TreeNode *root, std::pair<char, std::string*> *charIndex);
 
-
-//std::unordered_map<char, std::string> getMap(TreeNode *root);
-
-
-//unsigned char compressFile(char *buffer, std::unordered_map<char, std::string> &map, FILE *out, long &length);
-
-void encode(char *buffer, std::pair<char, std::string*> *charIndex, std::string &encodedString, unsigned int &itemCount, unsigned int &length);
-
-//void traceTreeLeafs(TreeNode *root, std::string &s, std::unordered_map<char, std::string> &map);
-
+void encode(char *buffer, std::pair<char, std::string*> *charIndex, std::string &encodedString, unsigned char &itemCount, unsigned int &length);
 
 #endif

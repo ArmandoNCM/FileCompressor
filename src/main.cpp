@@ -7,15 +7,7 @@
 
 
 
-
 int process(const char *fileName){
-	// Checking the number of arguments
-	//if(argc < 2)
-	//	return 1;
-	// Getting file pointer
-	//XXX FILE *in = fopen(argv[1], "r");
-
-	//char
 
 	// Reading file
 	char *buffer;
@@ -25,46 +17,44 @@ int process(const char *fileName){
 	if(result != 0)
 		return result; // If there was a problem, return its error code
 
+	// Creating the frequency count
+	unsigned int *freqCount;
+	freqCount = (unsigned int*) malloc(sizeof(unsigned int) * maxAscii);
+	memset(freqCount, 0, sizeof(unsigned int) * maxAscii);
 
-	// Creating the char map
-	std::unordered_map<char, unsigned int> charMap;
 	// Count Chars
-	countChars(buffer, charMap, fileSize); 
-
+	countChars(freqCount, buffer, fileSize);
 
 	// Creating a forward linked list
 	std::vector<TreeNode> list;
-	unsigned int itemCount = createLinkedList(charMap, list);
+	unsigned char itemCount = createLinkedList(freqCount, list);
+	free(freqCount);
+
 	// Getting Tree root
 	TreeNode root = generateTree(list, itemCount);
 
-//	std::cout << "Tree Elements:" << std::endl;
-//	printTreeElements(&root);
-//	std::cout << std::endl;
-
-	std::pair<char, std::string*> *charIndex;// = new std::pair<char, std::string*>()[];
-	charIndex = (std::pair<char, std::string*>*) malloc((sizeof(std::pair<char, std::string*>)) * itemCount);
-
 	// Generate character index with short representations of each character
+	std::pair<char, std::string*> *charIndex;
+	charIndex = (std::pair<char, std::string*>*) malloc((sizeof(std::pair<char, std::string*>)) * itemCount);
 	setCharIndex(&root, charIndex);
 
+	// Encoding file
 	std::string encodedString;
 	encode(buffer, charIndex, encodedString, itemCount, fileSize);
-	
 	free(buffer);
-	//delete buffer;
 
+	// Opening file to be written
+	std::string fPath(fileName);
+	fPath += ".huf";
+	FILE *out = fopen(fPath.c_str(), "wb");
 
-	char fPath[strlen(fileName) + 4]; // = {0};
-	memset(fPath, 0, strlen(fileName) + 4); // Set Array to Zero
-	strcat(fPath, fileName);
-	strcat(fPath, ".huff");
-	FILE *out = fopen(fPath , "wb");
+	// Writing encoded string to output fileName
 	writeBytes(encodedString, out);
-
 /*
+*/
 
-
+	// Setting header of file
+/*
 	fputc((char) 1, out); // SOH
 	fputs(argv[1], out); // fileName
 	fputc((char) 25, out); // EM
@@ -74,7 +64,7 @@ int process(const char *fileName){
 	storeTree(out, &root); // Tree 
 	fputc((char) 2, out); // STX
 
-	*/
+*/
 
 
 //	char paddingBits = compressFile(buffer, map, out, fileSize);

@@ -27,13 +27,6 @@ int readFile(char const *fileName, char **buffer, unsigned int &fileSize){
   	return 0;
 }
 
-std::ostream& operator<<(std::ostream& os, std::vector<TreeNode>& list){
-	for(auto item : list){
-		os << "(" << item.character << "," << item.frequency << ")";
-	}
-	return os;
-}
-
 void storeTree(FILE *out, TreeNode *root){
 	if(root != NULL){
 		if(root->character != 0)

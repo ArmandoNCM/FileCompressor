@@ -1,11 +1,4 @@
-//#include <io_handler.h>
-//#include <tree_node.h>
 #include <compressor.h>
-
-//std::ostream& operator<<(std::ostream &out, char)
-
-
-
 
 int process(const char *fileName){
 
@@ -48,12 +41,25 @@ int process(const char *fileName){
 	fPath += ".huf";
 	FILE *out = fopen(fPath.c_str(), "wb");
 
+	// Writing header of file
+	fputc((char) 1, out); // SOH
+
+	// Writing number of padding bits
+	char paddingBits = (char) 8 - (encodedString.length() % 8);
+	if(paddingBits == 8)
+		fputc(0, out);
+	else
+		fputc(paddingBits, out);
+
+	// Store tree
+	storeTree(out, &root); // Tree 
+
+	// Indicate encoded file comes
+	fputc((char) 2, out); // STX
+
 	// Writing encoded string to output fileName
 	writeBytes(encodedString, out);
-/*
-*/
 
-	// Setting header of file
 /*
 	fputc((char) 1, out); // SOH
 	fputs(argv[1], out); // fileName

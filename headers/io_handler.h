@@ -14,13 +14,12 @@
 
 // C++ libraries
 #include <iostream>
+#include <fstream>
 #include <vector>
 
-bool isDirectory(const char *fileName)
+bool isDirectory(const char *fileName);
 
 int readFile(char const *fileName, char **buffer, unsigned int &fileSize);
-
-std::ostream& operator<<(std::ostream& os, std::vector<TreeNode>& list);
 
 void storeTree(FILE *out, TreeNode *root);
 

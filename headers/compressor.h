@@ -12,7 +12,6 @@
 
 const unsigned char maxAscii = 255;
 
-
 bool compare(const TreeNode &leafA, const TreeNode &leafB);
 
 void countChars(unsigned int *freqCount, char *buffer, unsigned int &fileSize);

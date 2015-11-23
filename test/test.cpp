@@ -11,7 +11,7 @@ bool isDirectory(const char *fileName){
 	stat(fileName, &filestat);
 	return S_ISDIR(filestat.st_mode);
 }
-
+/*
 void processDirectory(const char *dirPath){
 	DIR *directory = opendir(dirPath);
 	dirent *dirEntity;
@@ -19,24 +19,23 @@ void processDirectory(const char *dirPath){
 		std::cout << dirEntity->d_name << std::endl;
 	}
 }
+*/
 
 int main(int argc, char const *argv[])
 {
 	/* code */
 
-	if(argc < 3)
-		return 1;
 
-	mkdir(argv[2], 0777);
-	
-	if(isDirectory(argv[1])){
-		std::cout << "Is directory" << std::endl;
-//		processDirectory(argv[1]);
-	}
-	else
-		std::cout << "Is file" << std::endl;
+//	if(argc < 2)
+//		return 1;
 
+	//mkdir(argv[1], 511);
 
+	char a = 5;
+	char b = 2;
+	char c = a / b;
+
+	std::cout << (int) c << std::endl;
 
 
 

@@ -26,6 +26,9 @@ int process(const char *fileName){
 	// Getting Tree root
 	TreeNode root = generateTree(list, itemCount);
 
+	// XXX TESTING
+	printTreeElements(&root);
+
 	// Generate character index with short representations of each character
 	std::pair<char, std::string*> *charIndex;
 	charIndex = (std::pair<char, std::string*>*) malloc((sizeof(std::pair<char, std::string*>)) * itemCount);

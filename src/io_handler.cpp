@@ -32,12 +32,12 @@ void storeTree(FILE *out, TreeNode *root){
 		if(root->character != 0)
 			fputc(root->character, out);
 		else
-			fputc('*', out);
+			fputc(7, out);
 		storeTree(out, root->left);
 		storeTree(out, root->right);
 
 	} else
-		fputc('.', out);
+		fputc(21, out);
 
 }
 

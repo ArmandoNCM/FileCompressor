@@ -21,6 +21,9 @@ int process(const char *fileName){
 	unsigned int pos(2);
 	TreeNode *root = generateTree(buffer, pos);
 
+	// XXX TESTING
+	printTreeElements(root);
+
 
 	// Creating bitstring
 	std::string bitString;
@@ -28,8 +31,10 @@ int process(const char *fileName){
 		bitString += bits_in_byte(buffer[i]).to_string();
 	}
 
+
 	std::string decodedString;
 	decode(bitString, root, decodedString);
+	
 	
 
 	char pops = (char) paddingBits / calculateShortestDistance(root);

@@ -2,12 +2,12 @@
 
 
 TreeNode* generateTree(char *buffer, unsigned int &pos){
-	if(buffer[pos] == '.')
+	if(buffer[pos] == 21)
 		return NULL;
 
 	TreeNode *node = new TreeNode;
 	node->character = 0;
-	if(buffer[pos] == '*'){
+	if(buffer[pos] == 7){
 		pos++;
 		node->left = generateTree(buffer, pos);
 		pos++;
